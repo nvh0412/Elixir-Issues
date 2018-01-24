@@ -1,6 +1,6 @@
 # Issues
 
-**TODO: Add description**
+Fetching Issues from a Github Project by using Elixir
 
 ## Installation
 
