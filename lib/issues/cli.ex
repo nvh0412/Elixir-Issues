@@ -42,12 +42,17 @@ defmodule Issues.CLI do
   def process({user, project, _count}) do
     Issues.GithubIssues.fetch(user, project)
     |> decode_response
+    |> sort_into_ascending_order
+  end
+
+  def sort_into_ascending_order(list_of_issues) do
+    Enum.sort list_of_issues, &(Map.get(&1, "created_at") <= Map.get(&2, "created_at"))
   end
 
   def decode_response({:ok, body}), do: body
 
   def decode_response({:error, body}) do
-    {_, message} = List.keyfind(error, "message", 0)
+    {_, message} = List.keyfind(body, "message", 0)
     IO.puts "Error fetching from Github: #{message}"
     System.halt(2)
   end
