@@ -39,10 +39,11 @@ defmodule Issues.CLI do
     System.halt(0)
   end
 
-  def process({user, project, _count}) do
+  def process({user, project, count}) do
     Issues.GithubIssues.fetch(user, project)
     |> decode_response
     |> sort_into_ascending_order
+    |> Enum.take(count)
   end
 
   def sort_into_ascending_order(list_of_issues) do
@@ -55,5 +56,9 @@ defmodule Issues.CLI do
     {_, message} = List.keyfind(body, "message", 0)
     IO.puts "Error fetching from Github: #{message}"
     System.halt(2)
+  end
+
+  def format_table(list_of_issues) do
+  
   end
 end
